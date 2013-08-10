@@ -1,0 +1,2 @@
+kadmin -p dan/admin -q "addprinc -randkey nfs/$(hostname -f)"
+sudo kadmin -p dan/admin -q "ktadd nfs/$(hostname -f)"

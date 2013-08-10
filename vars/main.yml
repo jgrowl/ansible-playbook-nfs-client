@@ -1,0 +1,3 @@
+global_user: root 
+global_use_sudo: False
+global_update_apt_cache: True

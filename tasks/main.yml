@@ -1,0 +1,34 @@
+---
+
+- name: nfs-client | install nfs packages
+  action: apt pkg=$item state=installed
+  with_items:
+    - nfs-common
+    - cachefilesd
+    - autofs
+  tags: nfs nfs-client
+
+- name: nfs-client | ensure nfs-common configuration exists
+  action: template src=templates/etc/default/nfs-common.j2 dest=/etc/default/nfs-common owner=root group=root
+  tags: nfs
+
+- name: nfs-client | ensure auto.home exists
+  action: template src=templates/etc/auto.home.j2 dest=/etc/auto.home owner=root group=root
+  notify:
+    - restart autofs
+  tags: autofs
+
+# auto.master should get called last
+- name: nfs-client | ensure auto.master exists
+  action: template src=templates/etc/auto.master.j2 dest=/etc/auto.master owner=root group=root
+  notify:
+    - restart autofs
+  tags: autofs
+
+- name: nfs-client | ensure cachefilesd exists
+  template: src=templates/etc/default/cachefilesd.j2 dest=/etc/default/cachefilesd owner=root group=root
+  tags: nfs
+
+- name: nfs-client | ensure cachefilesd service is started
+  service: name=cachefilesd state=started
+  tags: nfs
