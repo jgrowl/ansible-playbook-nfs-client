@@ -32,3 +32,4 @@
 - name: nfs-client | ensure cachefilesd service is started
   service: name=cachefilesd state=started
   tags: nfs
+  ignore_errors: yes
